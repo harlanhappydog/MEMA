@@ -1,10 +1,6 @@
 
-
 ########################################################################################
 ########################################################################################
-
-
-library("xtable")
 
 
 ########################################################################################
@@ -55,6 +51,8 @@ NELS88 <-list (
   sigma_hat 	= sigma_hat,
   lambda_hat 	= lambda_hat)
 
+rm(alpha, alpha_hat, beta, beta_hat, i, I, lambda_hat, mod_i, mu_hat, mydat, n, NELS88_dataframe, schooldata, sigma_hat, studyID, u, w, X, y)
+
 
 ######################## tainted schooldata  (NELS88_star) #################################
 ### dataset :  NELS88_star
@@ -67,7 +65,7 @@ for(k in 1:NELS88$NStudies){
 tau[k] <- round(runif(1, 0.1*NELS88$lambda[k], 0.9*NELS88$lambda[k]), 2)
 }
 tausquared 	<- tau^2
-gamma 		<- ((1+(tau^2/lambda_hat^2))^(-1))
+gamma 		<- ((1+(tau^2/NELS88$lambda_hat^2))^(-1))
 
 ## average, variance, and range attenuation factor is:
 # round(range(gamma), 2)
@@ -85,9 +83,8 @@ mean(gamma)* true_theta
 ((mean(gamma))^2)*true_omega^2 + var(gamma)*((true_omega^2) + true_theta^2)
 
 
-
-I <- length(table(schooldata_me$sch))
-	for(i in 1:I){
+K <- length(table(schooldata_me$sch))
+	for(i in 1:K){
 		schooldata_me[schooldata_me$sch==i,]$rdg <- schooldata[schooldata$sch==i,]$rdg +
 				rnorm(length(schooldata[schooldata$sch==i,]$rdg),0, tau[[i]])
 				}
@@ -95,7 +92,7 @@ I <- length(table(schooldata_me$sch))
 n_me <- X_me <- y_me <- list()
 beta_me <- alpha_me <- alpha_hat_me <- beta_hat_me <- sigma_hat_me <- lambda_hat_me <- mu_hat_me <- w <- u <- vector()
 
-for(i in 1:I){
+for(i in 1:K){
 	mydat_me 		<- schooldata_me[schooldata_me$sch==i,]
 	n_me[[i]] 		<- dim(mydat_me)[1]
 	y_me[[i]] 		<- mydat_me$sci
@@ -121,7 +118,6 @@ NELS88star_dataframe <- data.frame(
 	"mu"			= mu_hat_me, 
 	"lambda"	= lambda_hat_me)	
 	
-xtable(NELS88star_dataframe)
 
 NELS88star <-list (
   NStudies 		= length(table(schooldata_me$sch)),		
@@ -131,6 +127,12 @@ NELS88star <-list (
   mu_hat 		= mu_hat_me,
   sigma_hat 	= sigma_hat_me,
   lambda_hat 	= lambda_hat_me)
+
+
+
+rm(alpha_hat_me, alpha_me, beta_hat_me, beta_me, gamma, i, I, k, K, lambda_hat_me,
+mod_i_me, mu_hat_me, mydat_me, n_me, NELS88star_dataframe, schooldata, schooldata_me,
+sigma_hat_me, studyID, tau, tausquared, true_omega, true_theta, u, w, X_me, y_me)
 
 
 # a <- mean(tausquared); b <- var(tausquared) 
