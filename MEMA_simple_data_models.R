@@ -14,7 +14,7 @@ schooldata <- read.csv("~/Desktop/UBC/RECODID_ZIKV/Rcode/13schools.csv")
 
 n <- X <- y <- list()
 beta <- alpha <- alpha_hat <- beta_hat <- sigma_hat <- lambda_hat <- mu_hat <- w <- u <- vector()
-I <- length(table(schooldata$sch))
+K <- length(table(schooldata$sch))
 
 for(i in 1:I){
 	mydat 			<- schooldata[schooldata$sch==i,]
@@ -24,7 +24,7 @@ for(i in 1:I){
 	mod_i 			<- lm(y[[i]] ~ X[[i]])
 
 	alpha_hat[i] 	<- coef(mod_i)[1]
-	beta_hat[i] 		<- coef(mod_i)[2]
+	beta_hat[i] 		<- coef(mod_i)[2]rm
 	sigma_hat[i] 	<- summary(mod_i)$sigma
 	lambda_hat[i] 	<- sqrt(var(X[[i]]))
 	mu_hat[i] 		<- mean(X[[i]])
@@ -51,7 +51,7 @@ NELS88 <-list (
   sigma_hat 	= sigma_hat,
   lambda_hat 	= lambda_hat)
 
-rm(alpha, alpha_hat, beta, beta_hat, i, I, lambda_hat, mod_i, mu_hat, mydat, n, NELS88_dataframe, schooldata, sigma_hat, studyID, u, w, X, y)
+rm(alpha, alpha_hat, beta, beta_hat, i, K, lambda_hat, mod_i, mu_hat, mydat, n, NELS88_dataframe, schooldata, sigma_hat, studyID, u, w, X, y)
 
 
 ######################## tainted schooldata  (NELS88_star) #################################
@@ -130,7 +130,7 @@ NELS88star <-list (
 
 
 
-rm(alpha_hat_me, alpha_me, beta_hat_me, beta_me, gamma, i, I, k, K, lambda_hat_me,
+rm(alpha_hat_me, alpha_me, beta_hat_me, beta_me, gamma, i, k, K, lambda_hat_me,
 mod_i_me, mu_hat_me, mydat_me, n_me, NELS88star_dataframe, schooldata, schooldata_me,
 sigma_hat_me, studyID, tau, tausquared, true_omega, true_theta, u, w, X_me, y_me)
 
