@@ -40,7 +40,6 @@ NELS88_dataframe <- data.frame(
 	"mu"			= 	mu_hat, 
 	"lambda"	= 	lambda_hat)	
 	
-xtable(NELS88_dataframe)
 
 NELS88 <-list (
   NStudies 		= length(table(schooldata$sch)),		
