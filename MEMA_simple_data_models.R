@@ -172,7 +172,7 @@ alpha_sd_hat <- sqrt(var(alpha_hat))
 
 I<-length(alpha_hat)
 print(I)
-
+w <- u <- rep(0, I)
 for(jjj in 1:iter){
 
 	for(i in 1:I){
