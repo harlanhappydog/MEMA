@@ -126,7 +126,8 @@ NELS88star <-list (
   mu_hat 		= mu_hat_me,
   sigma_hat 	= sigma_hat_me,
   lambda_hat 	= lambda_hat_me,
-  tau		= tau)
+  tau		= tau,
+  gamma		= gamma)
 
 
 
