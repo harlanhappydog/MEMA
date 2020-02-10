@@ -16,7 +16,7 @@ n <- X <- y <- list()
 beta <- alpha <- alpha_hat <- beta_hat <- sigma_hat <- lambda_hat <- mu_hat <- w <- u <- vector()
 K <- length(table(schooldata$sch))
 
-for(i in 1:I){
+for(i in 1:K){
 	mydat 			<- schooldata[schooldata$sch==i,]
 	n[[i]] 			<- dim(mydat)[1]
 	y[[i]] 			<- mydat$sci
