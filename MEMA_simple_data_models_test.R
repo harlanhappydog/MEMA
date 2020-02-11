@@ -61,7 +61,7 @@ schooldata_me 	<- schooldata
 set.seed(123)
 tau <- rep(0,NELS88$NStudies)
 for(k in 1:7){
-tau[k] <- 0.5
+tau[k] <- 0.1
 }
 
 for(k in 8:13){
