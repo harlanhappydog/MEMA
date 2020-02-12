@@ -60,9 +60,10 @@ schooldata_me 	<- schooldata
 
 set.seed(123)
 tau <- rep(0,NELS88$NStudies)
-for(k in 1:NELS88$NStudies){
-tau[k] <- round(runif(1, 0.1*NELS88$lambda[k], 0.9*NELS88$lambda[k]), 2)
-}
+for(k in 1:4){ tau[k] <- 0.05*mean(NELS88$lambda_hat) }
+for(k in 5:8){ tau[k] <- 0.5*mean(NELS88$lambda_hat) }
+for(k in 9:K){ tau[k] <- 0.95*mean(NELS88$lambda_hat) }
+
 tausquared 	<- tau^2
 gamma 		<- ((1+(tau^2/NELS88$lambda_hat^2))^(-1))
 
