@@ -64,7 +64,9 @@ for(k in 1:5){
 tau[k] <- k/40
 }
 
-for(k in 6:13){
+tau[6] <- 7
+
+for(k in 7:13){
 tau[k] <- 2.5+k/10
 }
 
@@ -120,16 +122,16 @@ NELS88star_dataframe <- data.frame(
 	"alpha"		= alpha_hat_me,
 	"beta"		= beta_hat_me, 
 	"sigma"		= sigma_hat_me, 
-	"mu"			= mu_hat_me, 
+	"mu"		= mu_hat_me, 
 	"lambda"	= lambda_hat_me)	
 	
 
 NELS88star <-list (
-  NStudies 		= length(table(schooldata_me$sch)),		
+  NStudies 	= length(table(schooldata_me$sch)),		
   n_per_study 	= as.numeric(table(schooldata_me$sch)),
   alpha_hat 	= alpha_hat_me,
-  beta_hat 		= beta_hat_me,
-  mu_hat 		= mu_hat_me,
+  beta_hat 	= beta_hat_me,
+  mu_hat 	= mu_hat_me,
   sigma_hat 	= sigma_hat_me,
   lambda_hat 	= lambda_hat_me,
   tau		= tau,
