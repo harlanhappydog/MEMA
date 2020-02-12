@@ -574,9 +574,9 @@ transformed parameters {
 
 model {
   theta ~ normal(0, 10);  
-  omega ~ cauchy(0, 25);
+  omega ~ cauchy(0, 0.05);
   alpha_mu ~ normal(0, 10);  
-  alpha_sd ~ cauchy(0, 25);
+  alpha_sd ~ cauchy(0, 55);
 
   for (k in 1:NStudies)
 	tau[k] ~ inv_gamma((a^2)/b + 2, (a^3)/b + a);
