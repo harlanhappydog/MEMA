@@ -572,7 +572,7 @@ transformed parameters {
 
 model {
   theta ~ normal(0, 10);  
-  omega ~ cauchy(0, 1);
+  omega ~ cauchy(0, 0.05);
   alpha_mu ~ normal(0, 10);  
   alpha_sd ~ cauchy(0, 5);
 
