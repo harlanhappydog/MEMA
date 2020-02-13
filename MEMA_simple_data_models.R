@@ -82,6 +82,7 @@ mean(gamma)* true_theta
 # predicted value of omega_star:
 ((mean(gamma))^2)*true_omega^2 + var(gamma)*((true_omega^2) + true_theta^2)
 
+print(tau)
 
 K <- length(table(schooldata_me$sch))
 	for(i in 1:K){
