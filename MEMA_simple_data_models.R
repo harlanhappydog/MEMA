@@ -613,8 +613,6 @@ transformed data {
 
 
 parameters {
-  real<lower=0> a;
-  real<lower=0> b;
   vector<lower=0>[NStudies] tau;		
   vector[NStudies] alpha;
   vector[NStudies] beta;
