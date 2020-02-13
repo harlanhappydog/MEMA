@@ -1,4 +1,5 @@
 
+
 ########################################################################################
 ########################################################################################
 
@@ -60,9 +61,9 @@ schooldata_me 	<- schooldata
 
 set.seed(123)
 tau <- rep(0,NELS88$NStudies)
-for(k in 1:4){ tau[k] <- 0.05*mean(NELS88$lambda_hat) }
-for(k in 5:8){ tau[k] <- 0.5*mean(NELS88$lambda_hat) }
-for(k in 9:K){ tau[k] <- 0.95*mean(NELS88$lambda_hat) }
+for(k in 1:round(length(tau)/3)){ tau[k] <- 0.05*mean(NELS88$lambda_hat) }
+for(k in (1+round(length(tau)/3)):(2*round(length(tau)/3))){ tau[k] <- 0.5*mean(NELS88$lambda_hat) }
+for(k in (1+2*round(length(tau)/3)):length(tau)){ tau[k] <- 0.95*mean(NELS88$lambda_hat) }
 
 tausquared 	<- tau^2
 gamma 		<- ((1+(tau^2/NELS88$lambda_hat^2))^(-1))
@@ -115,16 +116,16 @@ NELS88star_dataframe <- data.frame(
 	"alpha"		= alpha_hat_me,
 	"beta"		= beta_hat_me, 
 	"sigma"		= sigma_hat_me, 
-	"mu"		= mu_hat_me, 
+	"mu"			= mu_hat_me, 
 	"lambda"	= lambda_hat_me)	
 	
 
 NELS88star <-list (
-  NStudies 	= length(table(schooldata_me$sch)),		
+  NStudies 		= length(table(schooldata_me$sch)),		
   n_per_study 	= as.numeric(table(schooldata_me$sch)),
   alpha_hat 	= alpha_hat_me,
-  beta_hat 	= beta_hat_me,
-  mu_hat 	= mu_hat_me,
+  beta_hat 		= beta_hat_me,
+  mu_hat 		= mu_hat_me,
   sigma_hat 	= sigma_hat_me,
   lambda_hat 	= lambda_hat_me,
   tau		= tau,
@@ -284,9 +285,9 @@ alphabeta = append_col(alpha, beta);
 
 model {
   theta ~ normal(0, 10);  
-  omega ~ cauchy(0, 25);
+  omega ~ cauchy(0, 2.5);
   alpha_mu ~ normal(0, 10);  
-  alpha_sd ~ cauchy(0, 25);
+  alpha_sd ~ cauchy(0, 2.5);
   for (k in 1:NStudies)	
 	coef_vec_hat[k,] ~ multi_normal(alphabeta[k,], SIG[k]);
   for (k in 1:NStudies)
@@ -356,9 +357,9 @@ alphabeta = append_col(alpha, beta);
 
 model {
 
-  omega ~ cauchy(0, 25);
+  omega ~ cauchy(0, 2.5);
   alpha_mu ~ normal(0, 10);  
-  alpha_sd ~ cauchy(0, 25);
+  alpha_sd ~ cauchy(0, 2.5);
   for (k in 1:NStudies)	
 	coef_vec_hat[k,] ~ multi_normal(alphabeta[k,], SIG[k]);
   for (k in 1:NStudies)
@@ -458,9 +459,9 @@ transformed parameters {
 
 model {
   theta ~ normal(0, 10);  
-  omega ~ cauchy(0, 25);
+  omega ~ cauchy(0, 2.5);
   alpha_mu ~ normal(0, 10);  
-  alpha_sd ~ cauchy(0, 25);
+  alpha_sd ~ cauchy(0, 2.5);
   for (k in 1:NStudies)	
 	coef_vec_hat[k,] ~ multi_normal(alphabeta_star[k,], SIG_star[k]);
   for (k in 1:NStudies)
@@ -567,9 +568,9 @@ transformed parameters {
 
 model {
   theta ~ normal(0, 10);  
-  omega ~ cauchy(0, 0.05);
+  omega ~ cauchy(0, 2.5);
   alpha_mu ~ normal(0, 10);  
-  alpha_sd ~ cauchy(0, 55);
+  alpha_sd ~ cauchy(0, 2.5);
 
   for (k in 1:NStudies)
 	tau[k] ~ uniform(a, b);
@@ -693,9 +694,9 @@ model {
   b ~ uniform(b_min, b_max);
   
   theta ~ normal(0, 10);  
-  omega ~ cauchy(0, 1);
+  omega ~ cauchy(0, 2.5);
   alpha_mu ~ normal(0, 10);  
-  alpha_sd ~ cauchy(0, 5);   
+  alpha_sd ~ cauchy(0, 2.5);
     
   for (k in 1:NStudies)
 	tau[k] ~ inv_gamma((a^2)/b + 2, (a^3)/b + a);
