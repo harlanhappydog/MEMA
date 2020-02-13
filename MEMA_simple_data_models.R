@@ -50,7 +50,7 @@ NELS88 <-list (
   sigma_hat 	= sigma_hat,
   lambda_hat 	= lambda_hat)
 
-rm(alpha, alpha_hat, beta, beta_hat, i, K, lambda_hat, mod_i, mu_hat, mydat, n, NELS88_dataframe, schooldata, sigma_hat, studyID, u, w, X, y)
+rm(alpha, alpha_hat, beta, beta_hat, i, K, lambda_hat, mod_i, mu_hat, mydat, n, schooldata, sigma_hat, studyID, u, w, X, y)
 
 
 ######################## tainted schooldata  (NELS88_star) #################################
@@ -133,7 +133,7 @@ NELS88star <-list (
 
 
 rm(alpha_hat_me, alpha_me, beta_hat_me, beta_me, gamma, i, k, K, lambda_hat_me,
-mod_i_me, mu_hat_me, mydat_me, n_me, NELS88star_dataframe, schooldata, schooldata_me,
+mod_i_me, mu_hat_me, mydat_me, n_me, schooldata, schooldata_me,
 sigma_hat_me, studyID, tau, tausquared, true_omega, true_theta, u, w, X_me, y_me)
 
 
