@@ -90,7 +90,7 @@ mean(gamma)* true_theta
 K <- length(table(schooldata_me$sch))
 	for(i in 1:K){
 		schooldata_me[schooldata_me$sch==i,]$rdg <- schooldata[schooldata$sch==i,]$rdg +
-				rnorm(length(schooldata[schooldata$sch==i,]$rdg),0, tau[[i]])
+				rnorm(length(schooldata[schooldata$sch==i,]$rdg),0, tau[i])
 				}
 
 n_me <- X_me <- y_me <- list()
