@@ -597,11 +597,8 @@ BayesMEMA3 <-
   vector[NStudies] mu_hat_star;
   vector<lower=0>[NStudies] sigma_hat_star;
   vector<lower=0>[NStudies] lambda_hat_star;
-  real<lower=0> a_min;
-  real<lower=0> a_max;
-  real<lower=0> b_min;
-  real<lower=0> b_max;
-
+  real<lower=0> tau_min;
+  real<lower=0> tau_max;
 }
 
 transformed data {
@@ -688,9 +685,6 @@ transformed parameters {
 
 
 model {
-
-  a ~ uniform(a_min, a_max);
-  b ~ uniform(b_min, b_max);
   
   theta ~ normal(0, 10);  
   omega ~ cauchy(0, 2.5);
@@ -698,7 +692,7 @@ model {
   alpha_sd ~ cauchy(0, 2.5);
     
   for (k in 1:NStudies)
-	tau[k] ~ inv_gamma((a^2)/b + 2, (a^3)/b + a);
+	tau[k] ~ uniform(tau_min, tau_max);
 
   for (k in 1:NStudies)	
 	coef_vec_hat[k,] ~ multi_normal(alphabeta_star[k,], SIG_star[k]);
