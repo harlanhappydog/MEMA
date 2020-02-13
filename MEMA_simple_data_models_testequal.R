@@ -65,7 +65,7 @@ for(k in (1+round(length(tau)/3)):(2*round(length(tau)/3))){ tau[k] <- 0.5*mean(
 for(k in (1+2*round(length(tau)/3)):length(tau)){ tau[k] <- 0.95*mean(NELS88$lambda_hat) }
 
 ## !!! ##
-tau <- rep(mean(tau),NELS88$NStudies)
+tau <- rep(mean(tau), length(tau))
 ## !!! ##
 
 tausquared 	<- tau^2
