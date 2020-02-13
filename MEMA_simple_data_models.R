@@ -283,10 +283,10 @@ alphabeta = append_col(alpha, beta);
 
 
 model {
-  theta ~ normal(0, 10);  
-  omega ~ cauchy(0, 2.5);
-  alpha_mu ~ normal(0, 10);  
-  alpha_sd ~ cauchy(0, 2.5);
+  theta ~ normal(0, 1);  
+  omega ~ cauchy(0, 0.3);
+  alpha_mu ~ normal(0, 1);  
+  alpha_sd ~ cauchy(0, 0.3);
   for (k in 1:NStudies)	
 	coef_vec_hat[k,] ~ multi_normal(alphabeta[k,], SIG[k]);
   for (k in 1:NStudies)
@@ -356,9 +356,9 @@ alphabeta = append_col(alpha, beta);
 
 model {
 
-  omega ~ cauchy(0, 2.5);
-  alpha_mu ~ normal(0, 10);  
-  alpha_sd ~ cauchy(0, 2.5);
+  omega ~ cauchy(0, 0.3);
+  alpha_mu ~ normal(0, 1);  
+  alpha_sd ~ cauchy(0, 0.3);
   for (k in 1:NStudies)	
 	coef_vec_hat[k,] ~ multi_normal(alphabeta[k,], SIG[k]);
   for (k in 1:NStudies)
@@ -457,10 +457,10 @@ transformed parameters {
 
 
 model {
-  theta ~ normal(0, 10);  
-  omega ~ cauchy(0, 2.5);
-  alpha_mu ~ normal(0, 10);  
-  alpha_sd ~ cauchy(0, 2.5);
+  theta ~ normal(0, 1);  
+  omega ~ cauchy(0, 0.3);
+  alpha_mu ~ normal(0, 1);  
+  alpha_sd ~ cauchy(0, 0.3);
   for (k in 1:NStudies)	
 	coef_vec_hat[k,] ~ multi_normal(alphabeta_star[k,], SIG_star[k]);
   for (k in 1:NStudies)
@@ -566,10 +566,10 @@ transformed parameters {
 
 
 model {
-  theta ~ normal(0, 10);  
-  omega ~ cauchy(0, 2.5);
-  alpha_mu ~ normal(0, 10);  
-  alpha_sd ~ cauchy(0, 2.5);
+  theta ~ normal(0, 1);  
+  omega ~ cauchy(0, 0.3);
+  alpha_mu ~ normal(0, 1);  
+  alpha_sd ~ cauchy(0, 0.3);
 
   for (k in 1:NStudies)
 	tau[k] ~ inv_gamma((a^2)/b + 2, (a^3)/b + a);
@@ -692,10 +692,10 @@ model {
   a ~ uniform(a_min, a_max);
   b ~ uniform(b_min, b_max);
   
-  theta ~ normal(0, 10);  
-  omega ~ cauchy(0, 2.5);
-  alpha_mu ~ normal(0, 10);  
-  alpha_sd ~ cauchy(0, 2.5);   
+  theta ~ normal(0, 1);  
+  omega ~ cauchy(0, 0.3);
+  alpha_mu ~ normal(0, 1);  
+  alpha_sd ~ cauchy(0, 0.3);   
     
   for (k in 1:NStudies)
 	tau[k] ~ inv_gamma((a^2)/b + 2, (a^3)/b + a);
