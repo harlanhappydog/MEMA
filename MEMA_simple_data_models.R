@@ -597,8 +597,6 @@ BayesMEMA3 <-
   vector[NStudies] mu_hat_star;
   vector<lower=0>[NStudies] sigma_hat_star;
   vector<lower=0>[NStudies] lambda_hat_star;
-  real<lower=0> tau_min;
-  real<lower=0> tau_max;
 }
 
 transformed data {
@@ -690,7 +688,7 @@ model {
   alpha_sd ~ cauchy(0, 2.5);
     
   for (k in 1:NStudies)
-	tau[k] ~ uniform(tau_min, tau_max);
+	tau[k] ~ uniform(0, lambda_hat_star[k]);
 
   for (k in 1:NStudies)	
 	coef_vec_hat[k,] ~ multi_normal(alphabeta_star[k,], SIG_star[k]);
