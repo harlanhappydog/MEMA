@@ -572,7 +572,7 @@ model {
   alpha_sd ~ cauchy(0, 55);
 
   for (k in 1:NStudies)
-	tau[k] ~ inv_gamma((a^2)/b + 2, (a^3)/b + a);
+	tau[k] ~ uniform(a, b);
   
   for (k in 1:NStudies)	
 	coef_vec_hat[k,] ~ multi_normal(alphabeta_star[k,], SIG_star[k]);
