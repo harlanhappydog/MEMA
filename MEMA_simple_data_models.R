@@ -147,6 +147,90 @@ sigma_hat_me, studyID, tau, tausquared, true_omega, true_theta, u, w, X_me, y_me
 
 #########################################################
 
+######################## (less) tainted schooldata  (NELS88_starstar) #################################
+### dataset :  NELS88_star
+schooldata 		<- read.csv("~/Desktop/UBC/RECODID_ZIKV/Rcode/13schools.csv")
+schooldata_me 	<- schooldata
+
+set.seed(123)
+tau <- rep(0,NELS88$NStudies)
+for(k in 1:round(length(tau)/3)){ tau[k] <- 2.47 }
+for(k in (1+round(length(tau)/3)):(2*round(length(tau)/3))){ tau[k] <- 0}
+for(k in (1+2*round(length(tau)/3)):length(tau)){ tau[k] <- 0 }
+
+tausquared 	<- tau^2
+gamma 		<- ((1+(tau^2/NELS88$lambda_hat^2))^(-1))
+
+## average, variance, and range attenuation factor is:
+# round(range(gamma), 2)
+# round(mean(gamma), 2)
+# round(var(gamma), 2)
+
+true_theta <- 0.57
+true_omega <- 0.05
+
+
+# predicted value of theta_star:
+mean(gamma)* true_theta
+
+# predicted value of omega_star:
+((mean(gamma))^2)*true_omega^2 + var(gamma)*((true_omega^2) + true_theta^2)
+
+print(tau)
+
+K <- length(table(schooldata_me$sch))
+	for(i in 1:K){
+		schooldata_me[schooldata_me$sch==i,]$rdg <- schooldata[schooldata$sch==i,]$rdg +
+				rnorm(length(schooldata[schooldata$sch==i,]$rdg),0, tau[i])
+				}
+
+n_me <- X_me <- y_me <- list()
+beta_me <- alpha_me <- alpha_hat_me <- beta_hat_me <- sigma_hat_me <- lambda_hat_me <- mu_hat_me <- w <- u <- vector()
+
+for(i in 1:K){
+	mydat_me 		<- schooldata_me[schooldata_me$sch==i,]
+	n_me[[i]] 		<- dim(mydat_me)[1]
+	y_me[[i]] 		<- mydat_me$sci
+	X_me[[i]] 		<- mydat_me$rdg
+	mod_i_me 		<- lm(y_me[[i]] ~ X_me[[i]])
+
+	alpha_hat_me[i] <- coef(mod_i_me)[1]
+	beta_hat_me[i] 	<- coef(mod_i_me)[2]
+	sigma_hat_me[i] <- summary(mod_i_me)$sigma
+	lambda_hat_me[i]<- sqrt(var(X_me[[i]]))
+	mu_hat_me[i] 	<- mean(X_me[[i]])
+	}
+	
+studyID <- schooldata_me$sch
+
+NELS88starstar_dataframe <- data.frame(
+	"n_i"		= paste(as.numeric(table(studyID))), 
+	"tau"		= tau, 
+	"gamma" 		= gamma, 
+	"alpha"		= alpha_hat_me,
+	"beta"		= beta_hat_me, 
+	"sigma"		= sigma_hat_me, 
+	"mu"			= mu_hat_me, 
+	"lambda"		= lambda_hat_me)	
+	
+
+NELS88starstar <-list (
+  NStudies 		= length(table(schooldata_me$sch)),		
+  n_per_study 	= as.numeric(table(schooldata_me$sch)),
+  alpha_hat 		= alpha_hat_me,
+  beta_hat 		= beta_hat_me,
+  mu_hat 		= mu_hat_me,
+  sigma_hat 		= sigma_hat_me,
+  lambda_hat 	= lambda_hat_me,
+  tau			= tau,
+  gamma			= gamma)
+
+
+
+rm(alpha_hat_me, alpha_me, beta_hat_me, beta_me, gamma, i, k, K, lambda_hat_me,
+mod_i_me, mu_hat_me, mydat_me, n_me, schooldata, schooldata_me,
+sigma_hat_me, studyID, tau, tausquared, true_omega, true_theta, u, w, X_me, y_me)
+
 
 
 
