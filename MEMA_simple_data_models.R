@@ -37,7 +37,7 @@ NELS88_dataframe <- data.frame(
 	"alpha"		= 	alpha_hat,
 	"beta"		= 	beta_hat, 
 	"sigma2"	= 	sigma_hat^2, 
-	"mu"			= 	mu_hat, 
+	"mu"		= 	mu_hat, 
 	"lambda"	= 	lambda_hat)	
 	
 
@@ -48,7 +48,10 @@ NELS88 <-list (
   beta_hat 		= beta_hat,
   mu_hat 		= mu_hat,
   sigma_hat 	= sigma_hat,
-  lambda_hat 	= lambda_hat)
+  lambda_hat 	= lambda_hat,
+  y		= y,
+  X		= X,
+  n		= n)
 
 rm(alpha, alpha_hat, beta, beta_hat, i, K, lambda_hat, mod_i, mu_hat, mydat, n, schooldata, sigma_hat, studyID, u, w, X, y)
 
@@ -263,20 +266,26 @@ w <- u <- rep(0, I)
 for(jjj in 1:iter){
 
 	for(i in 1:I){
+		
+	# equation (6) part 2
+	# (sigma_hat[i]^2/(n[[i]]*lambda_hat[i]^2) ) corresponds to si
 	w[i] <- (omega_hat^2 + 
 				(sigma_hat[i]^2/(n[[i]]*lambda_hat[i]^2) ) )^(-1)
-	
+
+	# equation (6) part 2
+	# (((lambda_hat[i]^2+mu_hat[i]^2)*sigma_hat[i]^2)/(n[[i]]*lambda_hat[i]^2) ) corresponds to si
 	u[i] <- ( alpha_sd_hat^2 +
 			(((lambda_hat[i]^2+mu_hat[i]^2)*sigma_hat[i]^2)/
 			(n[[i]]*lambda_hat[i]^2) )  )^(-1)			
 				
 				
 				}
-
+# alpha_sdvarB is equal to s_i^2	
 alpha_sdvarB <- ( ((lambda_hat^2+mu_hat^2)*sigma_hat^2) /	(unlist(n)*lambda_hat^2) ) 
 	
 alpha_mu_hat <- sum(u*alpha_hat)/sum(u)
 
+# Equation after eq (7)
 alpha_sd_hat <- sqrt(max(c(0, (
 					sum((u^2)*
 					( (alpha_hat-alpha_mu_hat)^2 - alpha_sdvarB)
@@ -284,11 +293,17 @@ alpha_sd_hat <- sqrt(max(c(0, (
 					   (1/sum(u)) ) )))
 	
 	
-	
+# omegavarB is equal to s_i^2	
 omegavarB <-	(sigma_hat^2/(unlist(n)*lambda_hat^2))
 
-theta_hat <- sum(w*beta_hat)/sum(w)	
 	
+# Equation (6):
+theta_hat <- sum(w*beta_hat)/sum(w)	
+
+	
+	
+# Equation after eq (7):
+# omegavarB is equal to s_i^2
 omega_hat <- sqrt(max(c(0, (
 				sum((w^2)*
 				( (beta_hat-theta_hat)^2 - omegavarB)
@@ -308,6 +323,8 @@ summarydat <- c(theta_hat, theta_hat-theta_CImargin, theta_hat+theta_CImargin, p
 names(summarydat)<- c("theta", "theta_CI_2.5%", "theta_CI_97.5%", "H0", "omega", "alpha_mu","alpha_sd") 
 return(summarydat)
 }
+
+
 
 
 
