@@ -133,9 +133,9 @@ NELS88star <-list (
   lambda_hat 	= lambda_hat_me,
   tau		= tau,
   gamma		= gamma,
-  y		= y,
-  X		= X,
-  n		= n)
+  y		= y_me,
+  X		= X_me,
+  n		= n_me)
 
 
 
@@ -229,9 +229,9 @@ NELS88starstar <-list (
   lambda_hat 		= lambda_hat_me,
   tau			= tau,
   gamma			= gamma,
-  y			= y,
-  X			= X,
-  n			= n)
+  y			= y_me,
+  X			= X_me,
+  n			= n_me)
 
 
 
