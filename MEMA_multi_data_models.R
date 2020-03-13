@@ -510,3 +510,68 @@ model {
 ##############################################################################
 #############
 
+## FREQUENTIST GLS:
+
+
+#######################
+
+
+GLSmulti <- function(n, y, X){
+
+I <- length(unlist(n))
+
+## Becker and Wu (2007)  (I think assuming that X is fixed not random)
+
+# We stack the k sample slope vectors and make a blockwise diag matrix...
+sigma_hat<-vector()
+cov_b<-b_estimator<-list()
+for(i in 1:I){
+mod<-	lm(y[[i]]~X[[i]][,-1])
+sigma_hat[i]<-summary(mod)$sigma
+b_estimator[[i]] <- solve(t(X[[i]])%*%X[[i]])%*%t(X[[i]])%*%y[[i]]
+cov_b[[i]] <- solve(t(X[[i]])%*%X[[i]])*(sigma_hat[i]^2)
+}
+
+
+b_estimator_vertical<-t(matrix(unlist(b_estimator),1,))
+
+SIGMA_matrix <- bdiag(cov_b)
+
+# Regardless of the components of W and beta, we estimate beta and its covariance as
+
+I3by3<-matrix(c(1,0,0,0,1,0,0,0,1),3,3)
+el <- (I3by3)
+dups <- list(el)[rep(1,I)]
+W <- do.call(rbind, dups)
+
+
+beta_hat_star <- solve(t(W)%*%solve(SIGMA_matrix)%*%W)%*%t(W)%*%solve(SIGMA_matrix)%*% b_estimator_vertical
+COV_beta_star_hat <- solve(t(W)%*%solve(SIGMA_matrix)%*%W)
+
+# RESULTS
+
+theta_2 <- (beta_hat_star)[2]
+
+CI_theta_2 <- c((beta_hat_star[2] - qnorm(1-0.025)*sqrt(COV_beta_star_hat[2,2])),(beta_hat_star[2] + qnorm(1-0.025)*sqrt(COV_beta_star_hat[2,2])))
+
+Tau_22 <- sqrt(COV_beta_star_hat[2,2])
+
+theta_1 <- (beta_hat_star)[1]
+
+Tau_11 <- sqrt(COV_beta_star_hat[1,1])
+
+
+theta_3 <-(beta_hat_star)[3]
+
+Tau_33 <- sqrt(COV_beta_star_hat[3,3])
+
+return( round(c(theta_2=theta_2,
+			CI_theta_2= CI_theta_2,
+			sqrtTau_22= sqrt(Tau_22),
+			theta_1= theta_1,
+			sqrtTau_11= sqrt(Tau_11),
+			theta_3= theta_3,
+			sqrtTau_33= sqrt(Tau_33)),2))
+}
+
+
