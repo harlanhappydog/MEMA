@@ -132,7 +132,10 @@ NELS88star <-list (
   sigma_hat 	= sigma_hat_me,
   lambda_hat 	= lambda_hat_me,
   tau		= tau,
-  gamma		= gamma)
+  gamma		= gamma,
+  y		= y,
+  X		= X,
+  n		= n)
 
 
 
@@ -218,14 +221,17 @@ NELS88starstar_dataframe <- data.frame(
 
 NELS88starstar <-list (
   NStudies 		= length(table(schooldata_me$sch)),		
-  n_per_study 	= as.numeric(table(schooldata_me$sch)),
+  n_per_study 		= as.numeric(table(schooldata_me$sch)),
   alpha_hat 		= alpha_hat_me,
   beta_hat 		= beta_hat_me,
   mu_hat 		= mu_hat_me,
   sigma_hat 		= sigma_hat_me,
-  lambda_hat 	= lambda_hat_me,
+  lambda_hat 		= lambda_hat_me,
   tau			= tau,
-  gamma			= gamma)
+  gamma			= gamma,
+  y			= y,
+  X			= X,
+  n			= n)
 
 
 
