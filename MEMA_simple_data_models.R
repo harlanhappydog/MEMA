@@ -211,12 +211,12 @@ studyID <- schooldata_me$sch
 NELS88starstar_dataframe <- data.frame(
 	"n_i"		= paste(as.numeric(table(studyID))), 
 	"tau"		= tau, 
-	"gamma" 		= gamma, 
+	"gamma" 	= gamma, 
 	"alpha"		= alpha_hat_me,
 	"beta"		= beta_hat_me, 
 	"sigma"		= sigma_hat_me, 
-	"mu"			= mu_hat_me, 
-	"lambda"		= lambda_hat_me)	
+	"mu"		= mu_hat_me, 
+	"lambda"	= lambda_hat_me)	
 	
 
 NELS88starstar <-list (
@@ -294,11 +294,11 @@ theta_1 <- (beta_hat_star)[1]
 
 Tau_11 <- sqrt(COV_beta_star_hat[1,1])
 
-return( round(c(theta_2=theta_2,
-			CI_theta_2= CI_theta_2,
-			Tau_22= Tau_22,
-			theta_1= theta_1,
-			Tau_11= Tau_11),2))
+return( round(c(	theta_2		= theta_2,
+			CI_theta_2	= CI_theta_2,
+			sqrtTau_22		= sqrt(Tau_22),
+			theta_1		= theta_1,
+			sqrtTau_11		= sqrt(Tau_11)),2))
 			
 			
 			
