@@ -514,9 +514,7 @@ model {
 
 
 #######################
-
-
-GLSmulti <- function(n, y, X){
+GLSmod <- function(n, y, X, dig=2){
 
 I <- length(unlist(n))
 
@@ -535,18 +533,21 @@ cov_b[[i]] <- solve(t(X[[i]])%*%X[[i]])*(sigma_hat[i]^2)
 
 b_estimator_vertical<-t(matrix(unlist(b_estimator),1,))
 
+
+
 SIGMA_matrix <- bdiag(cov_b)
 
 # Regardless of the components of W and beta, we estimate beta and its covariance as
 
-I3by3<-matrix(c(1,0,0,0,1,0,0,0,1),3,3)
-el <- (I3by3)
+Imat <- diag(rep(1,dim(X[[1]])[2]))
+el <- (Imat)
 dups <- list(el)[rep(1,I)]
 W <- do.call(rbind, dups)
 
 
 beta_hat_star <- solve(t(W)%*%solve(SIGMA_matrix)%*%W)%*%t(W)%*%solve(SIGMA_matrix)%*% b_estimator_vertical
 COV_beta_star_hat <- solve(t(W)%*%solve(SIGMA_matrix)%*%W)
+
 
 # RESULTS
 
@@ -560,18 +561,32 @@ theta_1 <- (beta_hat_star)[1]
 
 Tau_11 <- sqrt(COV_beta_star_hat[1,1])
 
+results <- round(c(	theta_2		= theta_2,
+			CI_theta_2	= CI_theta_2,
+			sqrtTau_22		=(Tau_22),
+			theta_1		= theta_1,
+			sqrtTau_11		=(Tau_11)), dig)
 
+
+if(I==3){
 theta_3 <-(beta_hat_star)[3]
-
 Tau_33 <- sqrt(COV_beta_star_hat[3,3])
 
-return( round(c(theta_2=theta_2,
-			CI_theta_2= CI_theta_2,
-			sqrtTau_22= (Tau_22),
-			theta_1= theta_1,
-			sqrtTau_11= (Tau_11),
-			theta_3= theta_3,
-			sqrtTau_33= (Tau_33)),2))
+results <- round(c(	theta_2		= theta_2,
+			CI_theta_2	= CI_theta_2,
+			sqrtTau_22		=(Tau_22),
+			theta_1		= theta_1,
+			sqrtTau_11		=(Tau_11)
+			theta_3 = theta_3,
+			sqrtTau_33=  (Tau_33) ), dig)
+
+
 }
 
+
+
+return(results)
+			
+			
+			}
 
