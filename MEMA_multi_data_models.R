@@ -574,11 +574,11 @@ Tau_33 <- sqrt(COV_beta_star_hat[3,3])
 
 results <- round(c(	theta_2		= theta_2,
 			CI_theta_2	= CI_theta_2,
-			sqrtTau_22		=(Tau_22),
+			sqrtTau_22	= (Tau_22),
 			theta_1		= theta_1,
-			sqrtTau_11		=(Tau_11),
-			theta_3 = theta_3,
-			sqrtTau_33=  (Tau_33) ), dig)
+			sqrtTau_11	= (Tau_11),
+			theta_3 	= theta_3,
+			sqrtTau_33	= (Tau_33) ), dig)
 
 
 }
