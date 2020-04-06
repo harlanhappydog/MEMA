@@ -957,6 +957,7 @@ parameters {
   real<lower=0> TAU_;
   real XI_;
   real<lower=0> OMEGA_;
+  real<lower=0.1> bb;
 }
 
 transformed parameters {
