@@ -2,18 +2,18 @@
 ### MEMA: Measurement Error in Meta-Analysis
 ### contact: harlan.campbell@stat.ubc.ca
 
-set.seed(87654321)
-
 #####################
 # Fresh start 
- 
+
 rm(list = ls(all = TRUE))
+set.seed(87654321)
+
 
 
 
 #####################
 # Determine missing packages and load them:
-required_packages <- c("Matrix", "RCurl", "runjags", "rjags", "sjstats", "rlist", "tidyverse", "xtable", "MCMCpack")
+required_packages <- c("MCMCvis", "latex2exp", "Matrix", "RCurl", "runjags", "rjags", "sjstats", "rlist", "tidyverse", "xtable", "MCMCpack")
 not_installed <- required_packages[!(required_packages %in% installed.packages()[ , "Package"])]    
 if(length(not_installed)) install.packages(not_installed, type="source")                                           
 invisible(suppressWarnings(lapply(required_packages, require, character.only = TRUE)))
@@ -24,6 +24,20 @@ ls()
 
 list_to_array<- function(mylist, dim1, dim2, dim3){
 		aperm((array(as.numeric(unlist(mylist)), dim=c(dim1,dim2,dim3))))}
+
+
+# Initial values for MCMC random seeds
+
+	inits1<- list(.RNG.name = "base::Wichmann-Hill", 
+                  .RNG.seed = c(123))
+	inits2<- list(.RNG.name = "base::Super-Duper", 
+                  .RNG.seed = c(456))
+	inits3<- list(.RNG.name = "base::Wichmann-Hill", 
+                  .RNG.seed = c(789))
+
+
+# Data:
+
 
 
 schooldata <- read.csv("https://raw.githubusercontent.com/harlanhappydog/MEMA/master/13schools.csv")
@@ -82,7 +96,7 @@ ls()
 ### dataset :  NELS88star_readmath
 
 
-schooldata <- read.csv("~/Desktop/UBC/RECODID_ZIKV/Rcode/13schools.csv")
+schooldata <- read.csv("https://raw.githubusercontent.com/harlanhappydog/MEMA/master/13schools.csv")
 
 kprime <- 5
 
@@ -135,7 +149,8 @@ for(i in 1:K){
 	}
 
 
-schooldata <- read.csv("~/Desktop/UBC/RECODID_ZIKV/Rcode/13schools.csv")
+
+schooldata <- read.csv("https://raw.githubusercontent.com/harlanhappydog/MEMA/master/13schools.csv")
 
 ########## original schooldata with X = [reading, math]  (ADNELS88) 
 ### dataset :  NELS88_readmath
@@ -252,11 +267,7 @@ Y[j] ~ dnorm(inprod(X[j,], beta[studyID[j],]), 1/(sigma[studyID[j]]^2));
 
 }"
                             
-              
-cat(multiMA, file = "multiMA.txt")  
-cat(multiMEMA, file = "multiMEMA.txt")  
-
-
+  
 #######
 
 # line 0:
@@ -265,7 +276,7 @@ QQ<-2
 K<-13
 N<-length(unlist(NELS88star_readmath$y))
 
-jags.m <- jags.model(file = "multiMA.txt", data = list (
+jags.m <- jags.model(textConnection(multiMA), data = list (
   N = length(unlist(NELS88star_readmath$y)),
   Q = QQ,
   NStudies = K,
@@ -276,6 +287,7 @@ jags.m <- jags.model(file = "multiMA.txt", data = list (
   D100 = matrix(diag(rep(1,QQ)),nrow=QQ)*100,
   m0 = rep(0,QQ)
   ),
+      inits =  list(inits1, inits2, inits3),  
 n.chains = 3, n.adapt = 10000)
 
 
@@ -296,7 +308,7 @@ kprime<-13
 K<-13
 N<-length(unlist(NELS88star_readmath$y))
 Nprime <- suppressWarnings(min(N,min(c(1:N)[NELS88star_readmath$studyID>kprime])-1))
-jags.m <- jags.model(file = "multiMEMA.txt", data = list (
+jags.m <- jags.model(textConnection(multiMEMA), data = list (
   N = length(unlist(NELS88star_readmath$y)),
   Nprime = Nprime,
   Q = QQ,
@@ -310,6 +322,7 @@ jags.m <- jags.model(file = "multiMEMA.txt", data = list (
   zeromat=as.array(matrix(diag(rep(1,QQ)),nrow=QQ)/(1e+20)),
   rho=0.1
   ),
+      inits =  list(inits1, inits2, inits3),  
 n.chains = 3, n.adapt = 10000)
 
 
@@ -327,7 +340,7 @@ kprime<-13
 K<-13
 N<-length(unlist(NELS88_readmath$y))
 Nprime <- suppressWarnings(min(N,min(c(1:N)[NELS88_readmath$studyID>kprime])-1))
-jags.m <- jags.model(file = "multiMEMA.txt", data = list (
+jags.m <- jags.model(textConnection(multiMEMA), data = list (
   N = length(unlist(NELS88_readmath$y)),
   Nprime = Nprime,
   Q = QQ,
@@ -341,6 +354,7 @@ jags.m <- jags.model(file = "multiMEMA.txt", data = list (
   zeromat=as.array(matrix(diag(rep(1,QQ)),nrow=QQ)/(1e+20)),
   rho=0.1
   ),
+        inits =  list(inits1, inits2, inits3),  
 n.chains = 3, n.adapt = 10000)
 
 
@@ -360,7 +374,7 @@ kprime<-5
 K<-13
 N<-length(unlist(NELS88star_readmath$y))
 Nprime <- suppressWarnings(min(N,min(c(1:N)[NELS88star_readmath$studyID>kprime])-1))
-jags.m <- jags.model(file = "multiMEMA.txt", data = list (
+jags.m <- jags.model(textConnection(multiMEMA), data = list (
   N = length(unlist(NELS88star_readmath$y)),
   Nprime = Nprime,
   Q = QQ,
@@ -374,6 +388,7 @@ jags.m <- jags.model(file = "multiMEMA.txt", data = list (
   zeromat=as.array(matrix(diag(rep(1,QQ)),nrow=QQ)/(1e+20)),
   rho=0.1
   ),
+          inits =  list(inits1, inits2, inits3),  
 n.chains = 3, n.adapt = 10000)
 
 
@@ -381,7 +396,7 @@ params <- c("theta", "tau")
 samps3 <- coda.samples(jags.m, params, n.iter = 100000, thin = 10)
 plot(samps3)
 line3_multi <- summary(samps3)$quantiles[,c(1,3,5)]
-
+line3_multi
 
 MCMCtrace(samps3, params = c("theta"), 
  priors = cbind(rnorm(100000, 0, 10), rnorm(100000, 0, 10), rnorm(100000, 0, 10)) , main_den = c(			   
@@ -392,7 +407,7 @@ MCMCtrace(samps3, params = c("theta"),
     TeX("Trace $\\theta_{1}$"),
     TeX("Trace $\\theta_{2}$"),
     TeX("Trace $\\theta_{3}$")),
-  filename= "MCMCmulti_line3.pdf")
+  filename= "MCMCmulti_line3_repro.pdf")
 
 #######
 
@@ -403,7 +418,7 @@ kprime <- 5
 K <- 5
 N <- length(unlist(NELS88star_readmath$y)[NELS88star_readmath$studyID<=K])
 Nprime <- min(c(N,suppressWarnings(min(N,min(c(1:N)[NELS88star_readmath$studyID>kprime])-1))), na.rm=TRUE)
-jags.m <- jags.model(file = "multiMEMA.txt", data = list (
+jags.m <- jags.model(textConnection(multiMEMA), data = list (
   N = N,
   Nprime = Nprime,
   Q = QQ,
@@ -417,6 +432,7 @@ jags.m <- jags.model(file = "multiMEMA.txt", data = list (
   zeromat=as.array(matrix(diag(rep(1,QQ)),nrow=QQ)/(1e+20)),
   rho=0.1
   ),
+          inits =  list(inits1, inits2, inits3),    
 n.chains = 3, n.adapt = 10000)
 
 
@@ -437,7 +453,7 @@ kprime<-0
 K<-13
 N<-length(unlist(NELS88star_readmath$y))
 Nprime <- suppressWarnings(min(N,min(c(1:N)[NELS88star_readmath$studyID>kprime])-1))
-jags.m <- jags.model(file = "multiMEMA.txt", data = list (
+jags.m <- jags.model(textConnection(multiMEMA), data = list (
   N = length(unlist(NELS88star_readmath$y)),
   Nprime = Nprime,
   Q = QQ,
@@ -451,6 +467,7 @@ jags.m <- jags.model(file = "multiMEMA.txt", data = list (
   zeromat=as.array(matrix(diag(rep(1,QQ)),nrow=QQ)/(1e+20)),
   rho=0.1
   ),
+          inits =  list(inits1, inits2, inits3),      
 n.chains = 3, n.adapt = 10000)
 
 
@@ -471,7 +488,7 @@ MCMCtrace(samps5, params = c("theta"),
     TeX("Trace $\\theta_{1}$"),
     TeX("Trace $\\theta_{2}$"),
     TeX("Trace $\\theta_{3}$")),
-  filename= "MCMCmulti_line5.pdf")
+  filename= "MCMCmulti_line5_repro.pdf")
 
 
 # params <- c("zeta1", "zeta2")		
@@ -499,7 +516,7 @@ K<-13
 N<-length(unlist(NELS88_readmath$y))
 
 Nprime <- suppressWarnings(min(N,min(c(1:N)[NELS88_readmath$studyID>kprime])-1))
-jags.m <- jags.model(file = "multiMEMA.txt", data = list (
+jags.m <- jags.model(textConnection(multiMEMA), data = list (
   N = length(unlist(NELS88_readmath$y)),
   Nprime = Nprime,
   Q = QQ,
@@ -513,6 +530,7 @@ jags.m <- jags.model(file = "multiMEMA.txt", data = list (
   zeromat=as.array(matrix(diag(rep(1,QQ)),nrow=QQ)/(1e+20)),
   rho = 0.1
   ),
+          inits =  list(inits1, inits2, inits3),        
 n.chains = 3, n.adapt = 10000)
 
 
@@ -534,7 +552,7 @@ K<-13
 N<-length(unlist(NELS88_readmath$y))
 
 Nprime <- suppressWarnings(min(N,min(c(1:N)[NELS88_readmath$studyID>kprime])-1))
-jags.m <- jags.model(file = "multiMEMA.txt", data = list (
+jags.m <- jags.model(textConnection(multiMEMA), data = list (
   N = length(unlist(NELS88_readmath$y)),
   Nprime = Nprime,
   Q = QQ,
@@ -548,6 +566,7 @@ jags.m <- jags.model(file = "multiMEMA.txt", data = list (
   zeromat=as.array(matrix(diag(rep(1,QQ)),nrow=QQ)/(1e+20)),
   rho = 0.1
   ),
+          inits =  list(inits1, inits2, inits3),        
 n.chains = 3, n.adapt = 10000)
 
 
